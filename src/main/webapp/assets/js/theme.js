@@ -44,15 +44,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const y = e.clientY - rect.top;
                 const midX = rect.width / 2;
                 const midY = rect.height / 2;
-                const rotateY = ((x - midX) / midX) * 8;
-                const rotateX = -((y - midY) / midY) * 8;
+                const rotateY = ((x - midX) / midX) * 10;
+                const rotateX = -((y - midY) / midY) * 10;
 
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(12px)`;
+                card.style.setProperty('--tilt-x', `${rotateX}deg`);
+                card.style.setProperty('--tilt-y', `${rotateY}deg`);
+                card.style.setProperty('--tilt-scale', '1.02');
                 card.classList.add('tilt-active');
             });
 
             wrapper.addEventListener('mouseleave', () => {
-                card.style.transform = '';
+                card.style.setProperty('--tilt-x', '0deg');
+                card.style.setProperty('--tilt-y', '0deg');
+                card.style.setProperty('--tilt-scale', '1');
                 card.classList.remove('tilt-active');
             });
         });
