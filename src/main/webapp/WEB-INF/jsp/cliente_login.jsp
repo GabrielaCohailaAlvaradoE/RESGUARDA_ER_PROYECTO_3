@@ -1,141 +1,97 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Portal de Cliente</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<c:url value='/assets/css/theme.css' />">
+    
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* MISMO FONDO "MIDNIGHT BLUE" QUE EL HEADER */
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.8) 100%), 
-                        url('https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-        }
+  body[data-theme="dark"] .form-control,
+  body[data-theme="dark"] .form-select{
+      color:var(--text-color) !important;
+      background:var(--input-bg) !important;
+      border-color:var(--border-color) !important;
+  }
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.1); /* Cristal Oscuro */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            padding: 3rem;
-            width: 100%;
-            max-width: 450px;
-            color: white;
-        }
+  body[data-theme="dark"] .form-control::placeholder{
+      color:rgba(231,240,255,.65) !important;
+      opacity:1;
+  }
 
-        .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white !important;
-            padding: 0.8rem 1rem;
-            border-radius: 12px;
-        }
+  body[data-theme="dark"] .form-control[readonly],
+  body[data-theme="dark"] .form-control:disabled{
+      color:var(--text-color) !important;
+      opacity:1 !important;
+      background:rgba(255,255,255,.04) !important;
+  }
 
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #4facfe; /* Azul neón al foco */
-            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.2);
-            color: white;
-        }
+  body[data-theme="dark"] input:-webkit-autofill,
+  body[data-theme="dark"] input:-webkit-autofill:hover,
+  body[data-theme="dark"] input:-webkit-autofill:focus{
+      -webkit-text-fill-color:var(--text-color) !important;
+      box-shadow:0 0 0 1000px var(--input-bg) inset !important;
+      transition:background-color 9999s ease-in-out 0s;
+  }
 
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Labels flotantes personalizados para fondo oscuro */
-        .form-floating > label {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .form-floating > .form-control:focus ~ label,
-        .form-floating > .form-control:not(:placeholder-shown) ~ label {
-            color: #4facfe;
-            background-color: transparent !important; 
-        }
-
-        .btn-primary-theme {
-            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); /* Gradiente Azul Brillante */
-            border: none;
-            padding: 1rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border-radius: 50px;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(0, 114, 255, 0.3);
-        }
-
-        .btn-primary-theme:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 114, 255, 0.4);
-            background: linear-gradient(135deg, #0072ff 0%, #00c6ff 100%);
-        }
-
-        .link-light-opacity {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .link-light-opacity:hover {
-            color: white;
-        }
+  body[data-theme="dark"] .input-group .btn,
+  body[data-theme="dark"] .password-toggle-btn{
+      color:var(--text-color) !important;
+      border-color:var(--border-color) !important;
+      background:rgba(255,255,255,.06) !important;
+  }
     </style>
+
 </head>
-<body>
 
-    <div class="login-card animate__animated animate__fadeInUp">
-        <div class="text-center mb-5">
-            <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
-                <i class="bi bi-shield-check-fill text-info" style="font-size: 3rem;"></i>
-            </div>
-            <h2 class="fw-bold mb-1">Bienvenido</h2>
-            <p class="text-white-50">Accede a tu portal de cliente</p>
-        </div>
-
-        <form action="<c:url value='/cliente/login' />" method="post">
-            
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
-                <label for="dni"><i class="bi bi-person-vcard me-2"></i>DNI / Documento</label>
-            </div>
-
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
-                <label for="contrasena"><i class="bi bi-lock me-2"></i>Contraseña</label>
-            </div>
-
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger border-0 bg-danger bg-opacity-25 text-white d-flex align-items-center p-3 rounded-3 mb-4" role="alert">
-                   <i class="bi bi-exclamation-circle-fill me-3 flex-shrink-0 fs-5"></i>
-                   <div class="small">${error}</div>
-                </div>
-            </c:if>
-            
-            <button class="w-100 btn btn-primary-theme text-white mb-4" type="submit">
-                INGRESAR
-            </button>
-            
-            <div class="d-grid gap-2">
-                        <a href="<c:url value='/registro' />" class="btn btn-outline-secondary border-0 btn-sm rounded-pill py-2 fw-bold" style="background: rgba(0,0,0,0.03);">
-                            <i class="bi bi-person-plus me-1"></i> Crear Cuenta Nueva
-                        </a>                
-                        </div>
-                </form>
+<body class="app-body hero-auth" data-theme="dark">
+    <div class="position-absolute top-0 end-0 p-3">
+        <button class="btn theme-toggle" type="button" id="themeToggle" aria-label="Cambiar tema"><i class="bi bi-moon-stars-fill"></i></button>
     </div>
-
+    <div class="parallax-wrapper w-100 d-flex justify-content-center">
+        <div class="auth-card tilt-card card-blur">
+            <div class="text-center mb-4">
+                
+                <img src="<c:url value='/assets/img/LogoWhite.png' />" class="brand-logo mb-2" data-light="<c:url value='/assets/img/LogoNegro.png' />" data-dark="<c:url value='/assets/img/LogoWhite.png' />" alt="Resguarda">
+                <h4 class="fw-bold">Bienvenido</h4>
+                <p class="text-muted-premium mb-0">Accede a tu portal de cliente</p>
+            </div>
+            <form action="<c:url value='/cliente/login' />" method="post" class="d-grid gap-3">
+                <div>
+                    <label for="dni" class="form-label small-label">DNI / Documento</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="contrasena" class="form-label small-label">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                        <button class="btn password-toggle-btn toggle-password" type="button" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+                <c:if test="${not empty error}">
+                    <div class="alert alert-premium alert-danger d-flex align-items-center gap-2" role="alert">
+                        <i class="bi bi-exclamation-circle"></i><span>${error}</span>
+                    </div>
+                </c:if>
+                <button class="btn btn-gradient w-100 py-2" type="submit">Ingresar</button>
+                <div class="d-grid gap-2">
+                    <a href="<c:url value='/registro' />" class="btn btn-ghost fw-semibold">
+                        <i class="bi bi-person-plus me-2"></i>Crear cuenta nueva
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<c:url value='/assets/js/theme.js' />"></script>
 </body>
 </html>
